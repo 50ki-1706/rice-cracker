@@ -1,0 +1,31 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+}
+
+.sectionLeft {
+  width: 70%;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid black;
+}
+
+.senbei {
+  width: 200px;
+  height: 200px;
+  background: saddlebrown;
+  border-radius: 100%;
+}
+
+.sectionRight {
+  width: 30%;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+}

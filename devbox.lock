@@ -1,0 +1,201 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "emmet-ls@latest": {
+      "last_modified": "2026-05-21T08:15:18Z",
+      "resolved": "github:NixOS/nixpkgs/4a29d733e8a7d5b824c3d8c958a946a9867b3eb2#emmet-ls",
+      "source": "devbox-search",
+      "version": "0.4.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ym6v4v93frvp8xyf4i1c0bfgy36flk9a-emmet-ls-0.4.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ym6v4v93frvp8xyf4i1c0bfgy36flk9a-emmet-ls-0.4.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/z909p129vdr5ry2z6ax9vh30isfydn9l-emmet-ls-0.4.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/z909p129vdr5ry2z6ax9vh30isfydn9l-emmet-ls-0.4.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cgrwr0va4fxpd6571jzgqka3ll326f4l-emmet-ls-0.4.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/cgrwr0va4fxpd6571jzgqka3ll326f4l-emmet-ls-0.4.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/5kv3kpib6nkcj9xx6giy78q3v271sxin-emmet-ls-0.4.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/5kv3kpib6nkcj9xx6giy78q3v271sxin-emmet-ls-0.4.1"
+        }
+      }
+    },
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2026-05-27T10:28:13Z",
+      "resolved": "github:NixOS/nixpkgs/4100e830e085863741bc69b156ec4ccd53ab5be0?lastModified=1779877693&narHash=sha256-NOF9NAREhxr50bbBfVcVOq%2BArCMSoe8dP79Pk2uyARk%3D"
+    },
+    "typescript-language-server@latest": {
+      "last_modified": "2026-05-29T05:01:12Z",
+      "resolved": "github:NixOS/nixpkgs/e9a7635a57597d9754eccebdfc7045e6c8600e6b#typescript-language-server",
+      "source": "devbox-search",
+      "version": "5.3.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/yb7hg9clnx63vc46255n1i171clqwrpr-typescript-language-server-5.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/yb7hg9clnx63vc46255n1i171clqwrpr-typescript-language-server-5.3.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4xzkw7c8nhrskiyqq06skp74mdgq9n47-typescript-language-server-5.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/4xzkw7c8nhrskiyqq06skp74mdgq9n47-typescript-language-server-5.3.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4gdm3vrij0vip5g3wamgda0xwfcv3i8w-typescript-language-server-5.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/4gdm3vrij0vip5g3wamgda0xwfcv3i8w-typescript-language-server-5.3.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/j76dlssxwmg12gval16b1psq99yz744m-typescript-language-server-5.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/j76dlssxwmg12gval16b1psq99yz744m-typescript-language-server-5.3.0"
+        }
+      }
+    },
+    "typescript@latest": {
+      "last_modified": "2026-05-21T08:15:18Z",
+      "resolved": "github:NixOS/nixpkgs/4a29d733e8a7d5b824c3d8c958a946a9867b3eb2#typescript",
+      "source": "devbox-search",
+      "version": "5.9.3",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4sxawrgzj7y8022mymy691488qf25swz-typescript-5.9.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/4sxawrgzj7y8022mymy691488qf25swz-typescript-5.9.3"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/931f2pybdb82zqfa5c515lldm8lj7319-typescript-5.9.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/931f2pybdb82zqfa5c515lldm8lj7319-typescript-5.9.3"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/0xbj8yrahfpxinl3zs0868mx6pn77vmg-typescript-5.9.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/0xbj8yrahfpxinl3zs0868mx6pn77vmg-typescript-5.9.3"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/1njx7nq9qkcslk0qaririipi1qpdv7vx-typescript-5.9.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/1njx7nq9qkcslk0qaririipi1qpdv7vx-typescript-5.9.3"
+        }
+      }
+    },
+    "vscode-langservers-extracted@latest": {
+      "last_modified": "2026-05-21T08:15:18Z",
+      "resolved": "github:NixOS/nixpkgs/4a29d733e8a7d5b824c3d8c958a946a9867b3eb2#vscode-langservers-extracted",
+      "source": "devbox-search",
+      "version": "4.10.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/llfb2z9qirq6ymhzzd04aybkw1f9xvj5-vscode-langservers-extracted-4.10.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/llfb2z9qirq6ymhzzd04aybkw1f9xvj5-vscode-langservers-extracted-4.10.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/m80v4hvixhp0hiw1mpa5sixgw6as7pnz-vscode-langservers-extracted-4.10.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/m80v4hvixhp0hiw1mpa5sixgw6as7pnz-vscode-langservers-extracted-4.10.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cr5j8kgyk94j6c3gnzj5kws8md40d0hy-vscode-langservers-extracted-4.10.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/cr5j8kgyk94j6c3gnzj5kws8md40d0hy-vscode-langservers-extracted-4.10.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/h27dfcgjmyh4nbdbq2gnm1d68mwy0mg9-vscode-langservers-extracted-4.10.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/h27dfcgjmyh4nbdbq2gnm1d68mwy0mg9-vscode-langservers-extracted-4.10.0"
+        }
+      }
+    }
+  }
+}
