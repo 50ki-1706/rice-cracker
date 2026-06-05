@@ -130,7 +130,7 @@ function renderProducts() {
     return `
       <div class="product-card" data-index="${index}">
         <h2>${product.name}</h2>
-        <p>${product.price}円</p>
+        <p>${product.price}枚</p>
         <p>${product.owned}個</p>
         <p class="effect">${effect}</p>
       </div>
