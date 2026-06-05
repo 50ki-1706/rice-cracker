@@ -5,17 +5,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rice Cracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 
 <body>
+  <header class="shop-sign">
+    <h1>和菓子処</h1>
+  </header>
   <div class="container">
+    <div id="particles-container"></div>
     <div class="sectionLeft">
       <div id="senbeiDisplay">せんべい: 0枚</div>
-      <div class="senbei"></div>
+      <div class="senbei-wrapper">
+        <canvas class="senbei" width="400" height="400" aria-label="煎餅"></canvas>
+      </div>
     </div>
     <div class="sectionRight">
+      <div class="shop-header">
+        <div class="noren">
+          <span>商</span>
+          <span>品</span>
+        </div>
+      </div>
       <div class="store">
         <div class="storeTitle">ショップ</div>
         <div id="products">
