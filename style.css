@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'PixelMplus12-Regular';
+  src: url('DONOTTOUCH/fonts/PixelMplus12-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --color-washi: #F7F3EB;
   --color-wood-dark: #3D2B1F;
@@ -9,7 +17,7 @@
   --color-cream: #FEFCF5;
   --color-senbei-edge: #C4953D;
   --color-senbei-face: #E8C98B;
-  --font-jp: 'Noto Serif JP', 'Hiragino Mincho ProN', 'YuMincho', 'MS Mincho', serif;
+  --font-jp: 'PixelMplus12-Regular', sans-serif;
 }
 
 *, *::before, *::after {
@@ -96,7 +104,6 @@ body {
   border: 2px solid var(--color-wood-light);
   border-radius: 8px;
   font-size: 1.2rem;
-  font-weight: 700;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
   animation: pulse 2s ease-in-out infinite;
 }
@@ -229,7 +236,6 @@ body {
 .noren span {
   color: var(--color-cream);
   font-size: 1.4rem;
-  font-weight: 700;
 }
 
 .store {
@@ -244,7 +250,6 @@ body {
   padding-bottom: 8px;
   border-bottom: 2px solid var(--color-gold);
   font-size: 1.5rem;
-  font-weight: 700;
   text-align: center;
   color: var(--color-wood-dark);
 }
@@ -281,7 +286,6 @@ body {
 .product-card .effect {
   font-size: 0.85rem;
   color: var(--color-wood);
-  font-style: italic;
 }
 
 .product-image {
