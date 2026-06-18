@@ -1,4 +1,5 @@
 // ゲーム本体。製品定義・収益計算・描画・クリック/自動 tick 処理を行い、window.Game を公開する。
+
 // 変数宣言
 const DEFAULT_PRODUCTS = [
   { name: "カーソル", basePrice: 4, price: 4, owned: 1 },
@@ -22,6 +23,14 @@ let _clickSound;
 let _clickProductSound;
 let _onSave;
 let _lastAutoSave;
+
+// 画面や音の設定
+const SENBEI_DISPLAY_SELECTOR = "#senbeiDisplay";
+const PARTICLES_CONTAINER_SELECTOR = "#particles-container";
+const SENBEI_BUTTON_SELECTOR = ".senbei";
+const PRODUCTS_SELECTOR = "#products";
+const CLICK_SOUND_PATH = "./DONOTTOUCH/sounds/せんべい・スナック食べる03.mp3";
+const PRODUCT_CLICK_SOUND_PATH = "./DONOTTOUCH/sounds/マウス・シングルクリック02.mp3";
 
 // 名前から製品を取得する
 function getProductByName(name) {
@@ -49,40 +58,6 @@ function getTotalAutoRate() {
   const helper = getProductByName("お手伝い");
   const farm = getProductByName("農場");
   return calcAutoRate(helper) + calcAutoRate(farm);
-}
-
-// 製品一覧を DOM に描画する
-function renderProducts() {
-  if (!_productsElement) {
-    return;
-  }
-
-  _productsElement.innerHTML = products.map((product, index) => {
-    const effect = product.name === "カーソル"
-      ? `クリックごとに +${product.owned}枚`
-      : `毎秒 ${calcAutoRate(product).toFixed(1)}枚`;
-    const imageSrc = productImages[product.name] || "";
-
-    return `
-      <div class="product-card" data-index="${index}">
-        <img class="product-image" src="${imageSrc}" alt="${product.name}">
-        <div class="product-info">
-          <h2>${product.name}</h2>
-          <p>${product.price}枚</p>
-          <p>${product.owned}個</p>
-          <p class="effect">${effect}</p>
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-// せんべい表示を更新する
-function renderSenbeiDisplay() {
-  const display = _senbeiDisplayElement;
-  if (display) {
-    display.textContent = `せんべい: ${Math.floor(senbei)}枚 (+${getTotalAutoRate().toFixed(1)}枚/秒)`;
-  }
 }
 
 // 製品を購入し、残りのせんべい枚数を返す
@@ -132,6 +107,60 @@ function onSenbeiClick() {
   }
 }
 
+// 自動生産 tick（200ms ごとに呼ばれる）
+function autoTick() {
+  const helper = getProductByName("お手伝い");
+  const farm = getProductByName("農場");
+
+  senbei += calcAutoRate(helper) / 5;
+  senbei += calcAutoRate(farm) / 5;
+
+  renderSenbeiDisplay();
+
+  const now = Date.now();
+  if (now - _lastAutoSave >= 10000) {
+    _onSave(senbei, products);
+    _lastAutoSave = now;
+  }
+}
+
+// ここまで：生徒が読んで改造する部分
+// ここから下：画面表示・保存接続・初期設定など、先生が用意する部分
+
+// 製品一覧を DOM に描画する
+function renderProducts() {
+  if (!_productsElement) {
+    return;
+  }
+
+  _productsElement.innerHTML = products.map((product, index) => {
+    const effect = product.name === "カーソル"
+      ? `クリックごとに +${product.owned}枚`
+      : `毎秒 ${calcAutoRate(product).toFixed(1)}枚`;
+    const imageSrc = productImages[product.name] || "";
+
+    return `
+      <div class="product-card" data-index="${index}">
+        <img class="product-image" src="${imageSrc}" alt="${product.name}">
+        <div class="product-info">
+          <h2>${product.name}</h2>
+          <p>${product.price}枚</p>
+          <p>${product.owned}個</p>
+          <p class="effect">${effect}</p>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// せんべい表示を更新する
+function renderSenbeiDisplay() {
+  const display = _senbeiDisplayElement;
+  if (display) {
+    display.textContent = `せんべい: ${Math.floor(senbei)}枚 (+${getTotalAutoRate().toFixed(1)}枚/秒)`;
+  }
+}
+
 // 製品カードクリック時の処理
 function onProductClick(event) {
   const card = event.target.closest(".product-card");
@@ -153,23 +182,6 @@ function onProductClick(event) {
     _onSave(senbei, products);
     renderProducts();
     renderSenbeiDisplay();
-  }
-}
-
-// 自動生産 tick（200ms ごとに呼ばれる）
-function autoTick() {
-  const helper = getProductByName("お手伝い");
-  const farm = getProductByName("農場");
-
-  senbei += calcAutoRate(helper) / 5;
-  senbei += calcAutoRate(farm) / 5;
-
-  renderSenbeiDisplay();
-
-  const now = Date.now();
-  if (now - _lastAutoSave >= 10000) {
-    _onSave(senbei, products);
-    _lastAutoSave = now;
   }
 }
 
@@ -204,3 +216,34 @@ const Game = {
 };
 
 window.Game = Game;
+
+// ブートストラップ。DOM・音声・ストレージを Game.init に接続する。
+(function () {
+  const senbeiDisplayElement = document.querySelector(SENBEI_DISPLAY_SELECTOR);
+  const particlesContainer = document.querySelector(PARTICLES_CONTAINER_SELECTOR);
+  const senbeiButton = document.querySelector(SENBEI_BUTTON_SELECTOR);
+  const productsElement = document.querySelector(PRODUCTS_SELECTOR);
+
+  const clickSound = new Audio(CLICK_SOUND_PATH);
+  const clickProductSound = new Audio(PRODUCT_CLICK_SOUND_PATH);
+
+  const state = loadState(window.Game.DEFAULT_PRODUCTS);
+
+  window.Game.init({
+    senbei: state.senbei,
+    products: state.products,
+    particlesContainer: particlesContainer,
+    senbeiButton: senbeiButton,
+    productsElement: productsElement,
+    senbeiDisplayElement: senbeiDisplayElement,
+    clickSound: clickSound,
+    clickProductSound: clickProductSound,
+    onSave: function (senbei, products) {
+      saveGameState(senbei, products);
+    }
+  });
+
+  if (state.shouldSave) {
+    saveGameState(state.senbei, state.products);
+  }
+})();
