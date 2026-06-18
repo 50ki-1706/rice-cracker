@@ -1,134 +1,63 @@
-let senbei;
-let products;
-
+// ゲーム本体。製品定義・収益計算・描画・クリック/自動 tick 処理を行い、window.Game を公開する。
+// 変数宣言
 const DEFAULT_PRODUCTS = [
   { name: "カーソル", basePrice: 4, price: 4, owned: 1 },
   { name: "お手伝い", basePrice: 100, price: 100, owned: 0 },
   { name: "農場", basePrice: 300, price: 300, owned: 0 }
 ];
 
-function cloneDefaults() {
-  return JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-}
+const productImages = {
+  "カーソル": "DONOTTOUCH/image/cursor.png",
+  "お手伝い": "DONOTTOUCH/image/ojisan.png",
+  "農場": "DONOTTOUCH/image/factry.png"
+};
 
+let senbei;
+let products;
+let _particlesContainer;
+let _senbeiButton;
+let _productsElement;
+let _senbeiDisplayElement;
+let _clickSound;
+let _clickProductSound;
+let _onSave;
+let _lastAutoSave;
+
+// 名前から製品を取得する
 function getProductByName(name) {
   const product = products.find((item) => item.name === name);
   return product || null;
 }
 
-function saveGameState() {
-  try {
-    localStorage.setItem(
-      "gameState",
-      JSON.stringify({
-        senbei,
-        products: products.map((product) => ({
-          name: product.name,
-          owned: product.owned,
-          price: product.price
-        }))
-      })
-    );
-  } catch (_) {
-  }
-}
-
-function loadState() {
-  const defaultProducts = cloneDefaults();
-  const savedStateText = localStorage.getItem("gameState");
-  const oldSenbeiText = localStorage.getItem("senbei");
-  let shouldMigrate = false;
-
-  senbei = 0;
-  products = defaultProducts;
-
-  if (savedStateText) {
-    try {
-      const savedState = JSON.parse(savedStateText);
-      if (savedState && typeof savedState === "object") {
-        const restoredSenbei = Number(savedState.senbei);
-        if (Number.isFinite(restoredSenbei) && restoredSenbei >= 0) {
-          senbei = restoredSenbei;
-        }
-
-        if (Array.isArray(savedState.products)) {
-          products = defaultProducts.map((defaultProduct) => {
-            const savedProduct = savedState.products.find((item) => item && item.name === defaultProduct.name);
-            const restoredProduct = JSON.parse(JSON.stringify(defaultProduct));
-
-            if (savedProduct && typeof savedProduct === "object") {
-              const owned = Number(savedProduct.owned);
-              if (Number.isFinite(owned) && owned >= 0) {
-                restoredProduct.owned = owned;
-              }
-            }
-
-            restoredProduct.price = Math.floor(
-              restoredProduct.basePrice * Math.pow(1.15, restoredProduct.owned)
-            );
-
-            return restoredProduct;
-          });
-        } else {
-          shouldMigrate = true;
-        }
-      } else {
-        shouldMigrate = true;
-      }
-    } catch (_) {
-      shouldMigrate = true;
-    }
-  } else {
-    shouldMigrate = true;
-  }
-
-  if ((!Number.isFinite(senbei) || senbei < 0) && oldSenbeiText !== null) {
-    const migratedSenbei = Number(oldSenbeiText);
-    senbei = Number.isFinite(migratedSenbei) && migratedSenbei >= 0 ? migratedSenbei : 0;
-    shouldMigrate = true;
-  }
-
-  if (!savedStateText && oldSenbeiText === null) {
-    senbei = 0;
-  }
-
-  if (shouldMigrate) {
-    saveGameState();
-  }
-}
-
+// 1クリックあたりのせんべい枚数を返す
 function getSenbeiPerClick() {
   const cursor = getProductByName("カーソル");
   return cursor ? cursor.owned : 1;
 }
 
+// 製品の自動生産速率を計算する
 function calcAutoRate(product) {
   if (!product || product.owned === 0) {
     return 0;
   }
-
   const multiplier = product.name === "農場" ? 8 : 1;
   return product.owned * multiplier * Math.pow(1.1, product.owned);
 }
 
+// 全製品の自動生産速率合計を返す
 function getTotalAutoRate() {
   const helper = getProductByName("お手伝い");
   const farm = getProductByName("農場");
   return calcAutoRate(helper) + calcAutoRate(farm);
 }
 
+// 製品一覧を DOM に描画する
 function renderProducts() {
-  if (!productsElement) {
+  if (!_productsElement) {
     return;
   }
 
-  const productImages = {
-    "カーソル": "DONOTTOUCH/image/cursor.png",
-    "お手伝い": "DONOTTOUCH/image/ojisan.png",
-    "農場": "DONOTTOUCH/image/factry.png"
-  };
-
-  productsElement.innerHTML = products.map((product, index) => {
+  _productsElement.innerHTML = products.map((product, index) => {
     const effect = product.name === "カーソル"
       ? `クリックごとに +${product.owned}枚`
       : `毎秒 ${calcAutoRate(product).toFixed(1)}枚`;
@@ -148,13 +77,15 @@ function renderProducts() {
   }).join("");
 }
 
+// せんべい表示を更新する
 function renderSenbeiDisplay() {
-  const display = document.querySelector("#senbeiDisplay");
+  const display = _senbeiDisplayElement;
   if (display) {
     display.textContent = `せんべい: ${Math.floor(senbei)}枚 (+${getTotalAutoRate().toFixed(1)}枚/秒)`;
   }
 }
 
+// 製品を購入し、残りのせんべい枚数を返す
 function buyProduct(senbeiAmount, product) {
   const availableSenbei = Math.floor(senbeiAmount);
   const price = product.price;
@@ -169,16 +100,63 @@ function buyProduct(senbeiAmount, product) {
   return availableSenbei - price;
 }
 
-loadState();
+// クリック時のパーティクルを生成する
+function createClickParticle(clientX, clientY) {
+  if (!_particlesContainer) return;
+  const particle = document.createElement("span");
+  particle.className = "particle";
+  particle.style.left = clientX + "px";
+  particle.style.top = clientY + "px";
+  particle.style.setProperty("--dx", (Math.random() - 0.5) * 80 + "px");
+  _particlesContainer.appendChild(particle);
+  particle.addEventListener("animationend", () => particle.remove(), { once: true });
+}
 
-const particlesContainer = document.querySelector("#particles-container");
+// せんべいクリック時の処理
+function onSenbeiClick() {
+  senbei += getSenbeiPerClick();
+  _onSave(senbei, products);
+  renderSenbeiDisplay();
+  _clickSound.currentTime = 0;
+  _clickSound.play();
 
-const senbeiButton = document.querySelector(".senbei");
-const clickSound = new Audio("./DONOTTOUCH/せんべい・スナック食べる03.mp3");
-const clickProductSound = new Audio("./DONOTTOUCH/マウス・シングルクリック02.mp3");
-const productsElement = document.querySelector("#products");
-let lastAutoSave = Date.now();
+  _senbeiButton.classList.remove("clicked");
+  void _senbeiButton.offsetWidth;
+  _senbeiButton.classList.add("clicked");
 
+  if (_particlesContainer) {
+    const rect = _senbeiButton.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    createClickParticle(cx, cy);
+  }
+}
+
+// 製品カードクリック時の処理
+function onProductClick(event) {
+  const card = event.target.closest(".product-card");
+  if (!card) {
+    return;
+  }
+  _clickProductSound.currentTime = 0;
+  _clickProductSound.play();
+  const index = Number.parseInt(card.dataset.index, 10);
+  const product = products[index];
+  if (!product) {
+    return;
+  }
+
+  const beforeSenbei = senbei;
+  senbei = buyProduct(senbei, product);
+
+  if (senbei !== beforeSenbei) {
+    _onSave(senbei, products);
+    renderProducts();
+    renderSenbeiDisplay();
+  }
+}
+
+// 自動生産 tick（200ms ごとに呼ばれる）
 function autoTick() {
   const helper = getProductByName("お手伝い");
   const farm = getProductByName("農場");
@@ -189,72 +167,40 @@ function autoTick() {
   renderSenbeiDisplay();
 
   const now = Date.now();
-  if (now - lastAutoSave >= 10000) {
-    saveGameState();
-    lastAutoSave = now;
+  if (now - _lastAutoSave >= 10000) {
+    _onSave(senbei, products);
+    _lastAutoSave = now;
   }
 }
 
-if (senbeiButton) {
-  senbeiButton.addEventListener("click", () => {
-    senbei += getSenbeiPerClick();
-    saveGameState();
+const Game = {
+  DEFAULT_PRODUCTS,
+
+  // Game を初期化し、DOM イベントと自動 tick を設定する
+  init(config) {
+    senbei = config.senbei;
+    products = config.products;
+    _particlesContainer = config.particlesContainer;
+    _senbeiButton = config.senbeiButton;
+    _productsElement = config.productsElement;
+    _senbeiDisplayElement = config.senbeiDisplayElement;
+    _clickSound = config.clickSound;
+    _clickProductSound = config.clickProductSound;
+    _onSave = config.onSave;
+    _lastAutoSave = Date.now();
+
+    if (_senbeiButton) {
+      _senbeiButton.addEventListener("click", onSenbeiClick);
+    }
+
+    if (_productsElement) {
+      _productsElement.addEventListener("click", onProductClick);
+    }
+
+    renderProducts();
     renderSenbeiDisplay();
-    clickSound.currentTime = 0;
-    clickSound.play();
+    setInterval(autoTick, 200);
+  }
+};
 
-    // アニメーション再発火（連打対応: 強制リフロー方式）
-    senbeiButton.classList.remove("clicked");
-    void senbeiButton.offsetWidth;
-    senbeiButton.classList.add("clicked");
-
-    // パーティクル生成
-    if (particlesContainer) {
-      const rect = senbeiButton.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      createClickParticle(cx, cy);
-    }
-  });
-}
-
-if (productsElement) {
-  productsElement.addEventListener("click", (event) => {
-    const card = event.target.closest(".product-card");
-    if (!card) {
-      return;
-    }
-  clickProductSound.currentTime = 0;
-  clickProductSound.play();
-    const index = Number.parseInt(card.dataset.index, 10);
-    const product = products[index];
-    if (!product) {
-      return;
-    }
-
-    const beforeSenbei = senbei;
-    senbei = buyProduct(senbei, product);
-
-    if (senbei !== beforeSenbei) {
-      saveGameState();
-      renderProducts();
-      renderSenbeiDisplay();
-    }
-  });
-}
-
-renderProducts();
-renderSenbeiDisplay();
-setInterval(autoTick, 200);
-
-// Intent: クリック演出用パーティクル。CSSアニメーション完了時にDOMから自動削除しメモリリークを防止する。
-function createClickParticle(clientX, clientY) {
-  if (!particlesContainer) return;
-  const particle = document.createElement("span");
-  particle.className = "particle";
-  particle.style.left = clientX + "px";
-  particle.style.top = clientY + "px";
-  particle.style.setProperty("--dx", (Math.random() - 0.5) * 80 + "px");
-  particlesContainer.appendChild(particle);
-  particle.addEventListener("animationend", () => particle.remove(), { once: true });
-}
+window.Game = Game;
