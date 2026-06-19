@@ -1,16 +1,19 @@
 // ここから：生徒が触る部分
 
-// まずは、せんべいの枚数を保存する変数senbeiを用意しよう！
+// まずは、せんべいの枚数を保存する変数senbeiと商品の状態を管理する変数productsを宣言しよう！
+// 変数senbeiには1や20,0.5のような整数と小数が入るよ。
+// 変数productsには{name:"商品の名前",owned:持っている商品の数,price:現在の商品の値段}、この要素が商品の数分配列で保存されるよ。
 let senbei;
+let products;
 
-// 変数に音声ファイルを代入して、音が出るようにしよう！
+// 定数に音声ファイルを代入して、音が出るようにしよう！
 
 // せんべいをクリックした時の音。
 const CLICK_SOUND_PATH = "./sounds/senbei.mp3";
 // 商品をクリックした時の音。
 const PRODUCT_CLICK_SOUND_PATH = "./sounds/mouse.mp3";
 
-// 名前から商品を探して返す
+// 名前からpeoducts
 function getProductByName(productList, name) {
   // 見つかった商品を入れる変数。最初は「見つからない」を表すnull
   let foundProduct = null;
@@ -114,10 +117,40 @@ function buyProduct(senbeiAmount, product) {
   return result;
 }
 
-// ここから下は触らない
+// ゲームをリセットしたときの初期状態を作る
+function createResetState(defaultProducts) {
+  // 商品データを初期状態に戻す（deep copy）
+  const resetProducts = cloneDefaults(defaultProducts);
+  // せんべいと商品を初期状態にした結果
+  const result = {
+    senbei: 0,
+    products: resetProducts
+  };
+  return result;
+}
 
-// 商品一覧を入れる変数
-let products;
+// リセットボタンが押されたときに最初に動く処理
+function handleResetClick() {
+  // 本当にリセットしてもいいか確認する
+  const confirmed = window.confirm("本当にリセットしますか？");
+  if (!confirmed) {
+    // キャンセルされたら何もしないで終わる
+    return;
+  }
+
+  // 難しいリセットの処理は隠された resetGame() に任せる
+  resetGame();
+}
+
+// HTML の id="resetButton" と同じ名前を使って、リセットボタンの要素を探す
+const resetButtonElement = document.querySelector("#resetButton");
+
+// リセットボタンが見つかったら、クリックしたときに handleResetClick を動かす
+if (resetButtonElement) {
+  resetButtonElement.addEventListener("click", handleResetClick);
+}
+
+// ここから下は触らない
 
 // 自動生産のタイマーや保存、画面表示をつなげる処理
 
@@ -208,6 +241,29 @@ function finishSenbeiClick() {
     const cy = rect.top + rect.height / 2;
     createClickParticle(cx, cy);
   }
+}
+
+// ゲームをリセットする難しい処理（localStorage や画面更新を隠す）
+function resetGame() {
+  // 初期状態を作る
+  const resetState = createResetState(window.Game.DEFAULT_PRODUCTS);
+  // せんべいの枚数を初期化する
+  senbei = resetState.senbei;
+  // 商品データを初期化する
+  products = resetState.products;
+
+  // 保存されているデータを消す
+  localStorage.removeItem("gameState");
+  localStorage.removeItem("senbei");
+
+  // 初期状態を保存する
+  _onSave(senbei, products);
+  // 最後に保存した時間を今にする
+  _lastAutoSave = Date.now();
+
+  // 画面を更新する
+  renderProducts();
+  renderSenbeiDisplay();
 }
 
 // クリックした場所にパーティクルを作る
