@@ -1,26 +1,33 @@
 // ここから：生徒が触る部分
 
-// まずは、せんべいの枚数を保存する変数senbeiと商品の状態を管理する変数productListを宣言しよう！
+// ⑤　変数を宣言してみよう！
+// せんべいの枚数を保存する変数senbeiと商品の状態を管理する変数productListを宣言しよう！
 // 変数senbeiには1や20,0.5のような整数と小数が入るよ。
 // 変数productListには{name:"商品の名前",owned:持っている商品の数,price:現在の商品の値段}、この要素が商品の数分配列で保存されるよ。
+// この下に書いてみよう！
 let senbei;
 let productList;
 
-// 定数に音声ファイルを代入して、音が出るようにしよう！
+// ⑥　定数に値を代入してみよう！
+// 定数は一度代入したら、再代入ができない定数だよ。
+// 今回は、文字で、音声ファイルが置かれている場所を代入するよ。
+// この下に書いてみよう！
 
 // せんべいをクリックした時の音。
 const CLICK_SOUND_PATH = "./sounds/senbei.mp3";
 // 商品をクリックした時の音。
 const PRODUCT_CLICK_SOUND_PATH = "./sounds/mouse.mp3";
 
-// 名前からproductList
+// ⑦　繰り返し処理を作ってみよう！
+// 指定した処理を3回繰り返す処理を作ってみよう。
+// 変数名は i を使用するよ。
 function getProductByName(productList, name) {
   // 見つかった商品を入れる変数。最初は「見つからない」を表すnull
   let foundProduct = null;
   // リストを1つずつ調べる
-  for (const item of productList) {
-    if (item.name === name) {
-      foundProduct = item;
+  for (let i = 0; i < 3; i++) {
+    if (productList[i].name === name) {
+      foundProduct = productList[i];
       break;
     }
   }
