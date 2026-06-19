@@ -20,7 +20,7 @@ function loadState(defaultProducts) {
   const savedStateText = localStorage.getItem("gameState");
   const oldSenbeiText = localStorage.getItem("senbei");
   let senbei = 0;
-  let products = cloneDefaults(defaultProducts);
+  let productList = cloneDefaults(defaultProducts);
   let shouldSave = false;
 
   if (savedStateText) {
@@ -33,7 +33,7 @@ function loadState(defaultProducts) {
         }
 
         if (Array.isArray(savedState.products)) {
-          products = defaultProducts.map((defaultProduct) => {
+          productList = defaultProducts.map((defaultProduct) => {
             const savedProduct = savedState.products.find((item) => item && item.name === defaultProduct.name);
             const restoredProduct = cloneDefaults(defaultProduct);
 
@@ -73,5 +73,5 @@ function loadState(defaultProducts) {
     senbei = 0;
   }
 
-  return { senbei, products, shouldSave };
+  return { senbei, products: productList, shouldSave };
 }
