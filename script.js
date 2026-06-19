@@ -13,7 +13,7 @@ const CLICK_SOUND_PATH = "./sounds/senbei.mp3";
 // 商品をクリックした時の音。
 const PRODUCT_CLICK_SOUND_PATH = "./sounds/mouse.mp3";
 
-// 名前からpeoducts
+// 名前からproducts
 function getProductByName(productList, name) {
   // 見つかった商品を入れる変数。最初は「見つからない」を表すnull
   let foundProduct = null;
@@ -42,9 +42,9 @@ function getSenbeiPerClick(productList) {
 }
 
 // 現在のせんべいの数に、クリックした分のせんべいを追加する処理を書こう！
-function onSenbeiClick(senbeiAmount, productList) {
+function onSenbeiClick(senbei, productList) {
   const perClick = getSenbeiPerClick(productList);
-  const result = senbeiAmount + perClick;
+  const result = senbei + perClick;
   return result;
 }
 
@@ -90,13 +90,13 @@ function calcNextPrice(product) {
 }
 
 // せんべいを使って商品を買う
-function buyProduct(senbeiAmount, product) {
+function buyProduct(senbei, product) {
   // 所持しているせんべいの枚数（小数点以下は切り捨て）
-  const availableSenbei = Math.floor(senbeiAmount);
+  const availableSenbei = Math.floor(senbei);
   // 商品の値段
   const price = product.price;
   // 買えなかったときの結果
-  let result = { senbei: senbeiAmount, product, purchased: false };
+  let result = { senbei: senbei, product, purchased: false };
   //　せんべいの数が買う商品の値段より少ない場合の処理を書こう！
   if (availableSenbei < price) {
     return result;
@@ -414,8 +414,8 @@ window.Game = Game;
     senbeiRateElement: senbeiRateElement,
     clickSound: clickSound,
     clickProductSound: clickProductSound,
-    onSave: function (senbei, products) {
-      saveGameState(senbei, products);
+    onSave: function (senbei, productList) {
+      saveGameState(senbei, productList);
     }
   });
 

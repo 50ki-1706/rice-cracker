@@ -1,11 +1,11 @@
 // ゲーム状態の localStorage 保存/読み込みと、マイグレーション・価格再計算
-function saveGameState(senbei, products) {
+function saveGameState(senbei, productList) {
   try {
     localStorage.setItem(
       "gameState",
       JSON.stringify({
         senbei,
-        products: products.map((product) => ({
+        products: productList.map((product) => ({
           name: product.name,
           owned: product.owned,
           price: product.price
