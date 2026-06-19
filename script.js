@@ -1,74 +1,200 @@
-// ゲーム本体。製品定義・収益計算・描画・クリック/自動 tick 処理を行い、window.Game を公開する。
+// ここから：生徒が触る部分
 
-// 変数宣言
-
+// まずは、せんべいの枚数を保存する変数senbeiを用意しよう！
 let senbei;
-let products;
 
-// 画面や音の設定
+// 変数に音声ファイルを代入して、音が出るようにしよう！
+
+// せんべいをクリックした時の音。
 const CLICK_SOUND_PATH = "./sounds/senbei.mp3";
+// 商品をクリックした時の音。
 const PRODUCT_CLICK_SOUND_PATH = "./sounds/mouse.mp3";
 
-// 名前から製品を取得する
-function getProductByName(name) {
-  const product = products.find((item) => item.name === name);
-  return product || null;
+// 名前から商品を探して返す
+function getProductByName(productList, name) {
+  // 見つかった商品を入れる変数。最初は「見つからない」を表すnull
+  let foundProduct = null;
+  // リストを1つずつ調べる
+  for (const item of productList) {
+    if (item.name === name) {
+      foundProduct = item;
+      break;
+    }
+  }
+  return foundProduct;
 }
 
-// 1クリックあたりのせんべい枚数を返す
-function getSenbeiPerClick() {
-  const cursor = getProductByName("カーソル");
-  return cursor ? cursor.owned : 1;
+// 1回のクリックで増えるせんべいの枚数を返してみよう！
+// カーソルの数だけ、せんべいが増えるように、resultの結果を変えてみよう。
+// カーソルの数はcursor.ownedで取得できるよ。
+function getSenbeiPerClick(productList) {
+  // カーソルという商品を探す
+  const cursor = getProductByName(productList, "カーソル");
+  // 返す枚数。カーソルがないときは1枚
+  let result = 1;
+  if (cursor !== null) {
+    result = cursor.owned;
+  }
+  return result;
 }
 
-// 製品の自動生産速率を計算する
+// 現在のせんべいの数に、クリックした分のせんべいを追加する処理を書こう！
+function onSenbeiClick(senbeiAmount, productList) {
+  const perClick = getSenbeiPerClick(productList);
+  const result = senbeiAmount + perClick;
+  return result;
+}
+
+// 1つの商品が自動で増やすせんべいの数を返す処理。
+// 変数resultの値を更新しよう！
 function calcAutoRate(product) {
+  // 自動生産しないときは0を返す
+  let result = 0;
   if (!product || product.owned === 0) {
-    return 0;
+    return result;
   }
-  const multiplier = product.name === "農場" ? 8 : 1;
-  return product.owned * multiplier * Math.pow(1.1, product.owned);
+  if (product.name !== "お手伝い" && product.name !== "農場") {
+    return result;
+  }
+  // 所有数に1.1の所有数乗をかける
+  result = product.owned * Math.pow(1.1, product.owned);
+  // 農場の場合は8倍する
+  if (product.name === "農場") {
+    result = result * 8;
+  }
+  return result;
 }
 
-// 全製品の自動生産速率合計を返す
-function getTotalAutoRate() {
-  const helper = getProductByName("お手伝い");
-  const farm = getProductByName("農場");
-  return calcAutoRate(helper) + calcAutoRate(farm);
+// 全部の商品の自動生産を合計して返す
+// 3回特定の処理をするプログラムを記述しよう！
+function getTotalAutoRate(productList) {
+  let total = 0;
+  // 商品の数だけ繰り返す
+  for (let i = 0; i < productList.length; i++) {
+    total += calcAutoRate(productList[i]);
+  }
+  return total;
 }
 
-// 製品を購入し、残りのせんべい枚数を返す
+// 商品を1つ買うときの次の値段を計算して返す
+// 変数resultを完成させよう！
+function calcNextPrice(product) {
+  // 基本価格に1.15の(所有数+1)乗をかける
+  const multiplied = product.basePrice * Math.pow(1.15, product.owned + 1);
+  // Math.floorは小数点以下を切り捨てて整数にする関数だよ
+  const result = Math.floor(multiplied);
+  return result;
+}
+
+// せんべいを使って商品を買う
 function buyProduct(senbeiAmount, product) {
+  // 所持しているせんべいの枚数（小数点以下は切り捨て）
   const availableSenbei = Math.floor(senbeiAmount);
+  // 商品の値段
   const price = product.price;
-
+  // 買えなかったときの結果
+  let result = { senbei: senbeiAmount, product, purchased: false };
+  //　せんべいの数が買う商品の値段より少ない場合の処理を書こう！
   if (availableSenbei < price) {
-    return senbeiAmount;
+    return result;
   }
 
-  product.owned += 1;
-  product.price = Math.floor(product.basePrice * Math.pow(1.15, product.owned));
-
-  return availableSenbei - price;
+  // 買ったあとの商品データ
+  const nextProduct = {
+    ...product,
+    owned: product.owned + 1,
+    price: calcNextPrice(product)
+  };
+  // 買えたときの結果
+  result = {
+    senbei: availableSenbei - price,
+    product: nextProduct,
+    purchased: true
+  };
+  return result;
 }
 
-// クリック時のパーティクルを生成する
-function createClickParticle(clientX, clientY) {
-  if (!_particlesContainer) return;
-  const particle = document.createElement("span");
-  particle.className = "particle";
-  particle.style.left = clientX + "px";
-  particle.style.top = clientY + "px";
-  particle.style.setProperty("--dx", (Math.random() - 0.5) * 80 + "px");
-  _particlesContainer.appendChild(particle);
-  particle.addEventListener("animationend", () => particle.remove(), { once: true });
+// ここから下は触らない
+
+// 商品一覧を入れる変数
+let products;
+
+// 自動生産のタイマーや保存、画面表示をつなげる処理
+
+// 自動保存の時間が来たかどうかを調べて返す
+function shouldAutoSave(now) {
+  // 前回保存してから経過した時間（ミリ秒）
+  const elapsed = now - _lastAutoSave;
+  // 10秒以上経っていればtrue、そうでなければfalse
+  const result = elapsed >= 10000;
+  return result;
 }
 
-// せんべいクリック時の処理
-function onSenbeiClick() {
-  senbei += getSenbeiPerClick();
+// 自動保存をして、最後に保存した時間を更新する
+function saveAutoProgress(now) {
+  _onSave(senbei, products);
+  _lastAutoSave = now;
+}
+
+// 自動生産の処理（200msごとに呼ばれる）
+function autoTick() {
+  // 1秒に5回呼ばれるから、1秒分の生産量を5で割る
+  senbei += getTotalAutoRate(products) / 5;
+  renderSenbeiDisplay();
+
+  const now = Date.now();
+  if (shouldAutoSave(now)) {
+    saveAutoProgress(now);
+  }
+}
+
+// パーティクルを表示するための要素
+let _particlesContainer;
+// せんべい画像の要素
+let _senbeiButton;
+// 商品一覧を表示する要素
+let _productsElement;
+// せんべい表示用の要素（今は直接使っていない。互換性のために残している）
+let _senbeiDisplayElement;
+// せんべい枚数を表示する要素
+let _senbeiCountElement;
+// 自動生産量を表示する要素
+let _senbeiRateElement;
+// せんべいクリック音
+let _clickSound;
+// 商品クリック音
+let _clickProductSound;
+// 保存するときに使う関数
+let _onSave;
+// 前回自動保存した時間
+let _lastAutoSave;
+
+// DOM要素を探すためのセレクター名
+const SENBEI_DISPLAY_SELECTOR = "#senbeiDisplay";
+const SENBEI_COUNT_SELECTOR = "#senbeiCount";
+const SENBEI_RATE_SELECTOR = "#senbeiRate";
+const PARTICLES_CONTAINER_SELECTOR = "#particles-container";
+const SENBEI_BUTTON_SELECTOR = ".senbei";
+const PRODUCTS_SELECTOR = "#products";
+
+// 商品名と画像ファイル名の対応表
+const productImages = {
+  "カーソル": "DONOTTOUCH/image/cursor.png",
+  "お手伝い": "DONOTTOUCH/image/ojisan.png",
+  "農場": "DONOTTOUCH/image/factory.png"
+};
+
+// クリックを計算に繋げて画面を動かす
+function handleSenbeiClick() {
+  senbei = onSenbeiClick(senbei, products);
+  finishSenbeiClick();
+}
+
+// クリック後の残りの処理をまとめて行う
+function finishSenbeiClick() {
   _onSave(senbei, products);
   renderSenbeiDisplay();
+
   _clickSound.currentTime = 0;
   _clickSound.play();
 
@@ -84,63 +210,36 @@ function onSenbeiClick() {
   }
 }
 
-// 自動生産 tick（200ms ごとに呼ばれる）
-function autoTick() {
-  const helper = getProductByName("お手伝い");
-  const farm = getProductByName("農場");
-
-  senbei += calcAutoRate(helper) / 5;
-  senbei += calcAutoRate(farm) / 5;
-
-  renderSenbeiDisplay();
-
-  const now = Date.now();
-  if (now - _lastAutoSave >= 10000) {
-    _onSave(senbei, products);
-    _lastAutoSave = now;
-  }
+// クリックした場所にパーティクルを作る
+function createClickParticle(clientX, clientY) {
+  if (!_particlesContainer) return;
+  const particle = document.createElement("span");
+  particle.className = "particle";
+  particle.style.left = clientX + "px";
+  particle.style.top = clientY + "px";
+  particle.style.setProperty("--dx", (Math.random() - 0.5) * 80 + "px");
+  _particlesContainer.appendChild(particle);
+  particle.addEventListener("animationend", () => {
+    particle.remove();
+  }, { once: true });
 }
 
-// ここまで：みんなが作る部分
-// ここから下：ゲームを起動、表示するための処理。触らない。
-
-let _particlesContainer;
-let _senbeiButton;
-let _productsElement;
-let _senbeiDisplayElement;
-let _senbeiCountElement;
-let _senbeiRateElement;
-let _clickSound;
-let _clickProductSound;
-let _onSave;
-let _lastAutoSave;
-
-const SENBEI_DISPLAY_SELECTOR = "#senbeiDisplay";
-const SENBEI_COUNT_SELECTOR = "#senbeiCount";
-const SENBEI_RATE_SELECTOR = "#senbeiRate";
-const PARTICLES_CONTAINER_SELECTOR = "#particles-container";
-const SENBEI_BUTTON_SELECTOR = ".senbei";
-const PRODUCTS_SELECTOR = "#products";
-
-const productImages = {
-  "カーソル": "DONOTTOUCH/image/cursor.png",
-  "お手伝い": "DONOTTOUCH/image/ojisan.png",
-  "農場": "DONOTTOUCH/image/factory.png"
-};
-
-// 製品一覧を DOM に描画する
+// 商品一覧を画面に描画する
 function renderProducts() {
   if (!_productsElement) {
     return;
-}
+  }
 
-  _productsElement.innerHTML = products.map((product, index) => {
-    const effect = product.name === "カーソル"
-      ? `クリックごとに +${product.owned}枚`
-      : `毎秒 ${calcAutoRate(product).toFixed(1)}枚`;
+  const productCards = products.map((product, index) => {
+    // 商品の効果説明文
+    const effect =
+      product.name === "カーソル"
+        ? `クリックごとに +${product.owned}枚`
+        : `毎秒 ${calcAutoRate(product).toFixed(1)}枚`;
+    // 商品の画像ファイル名
     const imageSrc = productImages[product.name] || "";
-
-    return `
+    // 商品カードのHTML
+    const cardHtml = `
       <div class="product-card" data-index="${index}">
         <img class="product-image" src="${imageSrc}" alt="${product.name}">
         <div class="product-info">
@@ -151,20 +250,23 @@ function renderProducts() {
         </div>
       </div>
     `;
-  }).join("");
+    return cardHtml;
+  });
+
+  _productsElement.innerHTML = productCards.join("");
 }
 
-// せんべい表示を更新する
+// せんべいの枚数と自動生産量を画面に表示する
 function renderSenbeiDisplay() {
   if (_senbeiCountElement) {
     _senbeiCountElement.textContent = Math.floor(senbei);
   }
   if (_senbeiRateElement) {
-    _senbeiRateElement.textContent = getTotalAutoRate().toFixed(1);
+    _senbeiRateElement.textContent = getTotalAutoRate(products).toFixed(1);
   }
 }
 
-// 製品カードクリック時の処理
+// 商品カードがクリックされたときの処理
 function onProductClick(event) {
   const card = event.target.closest(".product-card");
   if (!card) {
@@ -172,23 +274,25 @@ function onProductClick(event) {
   }
   _clickProductSound.currentTime = 0;
   _clickProductSound.play();
+
   const index = Number.parseInt(card.dataset.index, 10);
   const product = products[index];
   if (!product) {
     return;
   }
 
-  const beforeSenbei = senbei;
-  senbei = buyProduct(senbei, product);
+  const result = buyProduct(senbei, product);
 
-  if (senbei !== beforeSenbei) {
+  if (result.purchased) {
+    senbei = result.senbei;
+    products[index] = result.product;
     _onSave(senbei, products);
     renderProducts();
     renderSenbeiDisplay();
   }
 }
 
-
+// ゲーム開始時の商品データ
 const DEFAULT_PRODUCTS = [
   { name: "カーソル", basePrice: 4, price: 4, owned: 1 },
   { name: "お手伝い", basePrice: 100, price: 100, owned: 0 },
@@ -198,7 +302,7 @@ const DEFAULT_PRODUCTS = [
 const Game = {
   DEFAULT_PRODUCTS,
 
-  // Game を初期化し、DOM イベントと自動 tick を設定する
+  // Gameを初期化して、DOMイベントと自動tickを設定する
   init(config) {
     senbei = config.senbei;
     products = config.products;
@@ -214,7 +318,7 @@ const Game = {
     _lastAutoSave = Date.now();
 
     if (_senbeiButton) {
-      _senbeiButton.addEventListener("click", onSenbeiClick);
+      _senbeiButton.addEventListener("click", handleSenbeiClick);
     }
 
     if (_productsElement) {
@@ -229,7 +333,7 @@ const Game = {
 
 window.Game = Game;
 
-// ブートストラップ。DOM・音声・ストレージを Game.init に接続する。
+// ゲームを起動するための処理。DOM・音声・保存データをつなぐ
 (function () {
   const senbeiDisplayElement = document.querySelector(SENBEI_DISPLAY_SELECTOR);
   const senbeiCountElement = document.querySelector(SENBEI_COUNT_SELECTOR);
