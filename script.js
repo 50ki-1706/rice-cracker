@@ -56,13 +56,13 @@ function calcAutoRate(product) {
   if (!product || product.owned === 0) {
     return result;
   }
-  if (product.name !== "お手伝い" && product.name !== "農場") {
+  if (product.name !== "お手伝い" && product.name !== "せんべい工場") {
     return result;
   }
   // 所有数に1.1の所有数乗をかける
   result = product.owned * Math.pow(1.1, product.owned);
-  // 農場の場合は8倍する
-  if (product.name === "農場") {
+  // せんべい工場の場合は8倍する
+  if (product.name === "せんべい工場") {
     result = result * 8;
   }
   return result;
@@ -214,7 +214,7 @@ const PRODUCTS_SELECTOR = "#products";
 const productImages = {
   "カーソル": "DONOTTOUCH/image/cursor.png",
   "お手伝い": "DONOTTOUCH/image/ojisan.png",
-  "農場": "DONOTTOUCH/image/factory.png"
+  "せんべい工場": "DONOTTOUCH/image/factory.png"
 };
 
 // クリックを計算に繋げて画面を動かす
@@ -352,7 +352,7 @@ function onProductClick(event) {
 const DEFAULT_PRODUCTS = [
   { name: "カーソル", basePrice: 4, price: 4, owned: 1 },
   { name: "お手伝い", basePrice: 100, price: 100, owned: 0 },
-  { name: "農場", basePrice: 300, price: 300, owned: 0 }
+  { name: "せんべい工場", basePrice: 300, price: 300, owned: 0 }
 ];
 
 const Game = {
