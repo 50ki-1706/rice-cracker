@@ -1,40 +1,13 @@
 // ゲーム本体。製品定義・収益計算・描画・クリック/自動 tick 処理を行い、window.Game を公開する。
 
 // 変数宣言
-const DEFAULT_PRODUCTS = [
-  { name: "カーソル", basePrice: 4, price: 4, owned: 1 },
-  { name: "お手伝い", basePrice: 100, price: 100, owned: 0 },
-  { name: "農場", basePrice: 300, price: 300, owned: 0 }
-];
-
-const productImages = {
-  "カーソル": "DONOTTOUCH/image/cursor.png",
-  "お手伝い": "DONOTTOUCH/image/ojisan.png",
-  "農場": "DONOTTOUCH/image/factory.png"
-};
 
 let senbei;
 let products;
-let _particlesContainer;
-let _senbeiButton;
-let _productsElement;
-let _senbeiDisplayElement;
-let _senbeiCountElement;
-let _senbeiRateElement;
-let _clickSound;
-let _clickProductSound;
-let _onSave;
-let _lastAutoSave;
 
 // 画面や音の設定
-const SENBEI_DISPLAY_SELECTOR = "#senbeiDisplay";
-const SENBEI_COUNT_SELECTOR = "#senbeiCount";
-const SENBEI_RATE_SELECTOR = "#senbeiRate";
-const PARTICLES_CONTAINER_SELECTOR = "#particles-container";
-const SENBEI_BUTTON_SELECTOR = ".senbei";
-const PRODUCTS_SELECTOR = "#products";
-const CLICK_SOUND_PATH = "./DONOTTOUCH/sounds/せんべい・スナック食べる03.mp3";
-const PRODUCT_CLICK_SOUND_PATH = "./DONOTTOUCH/sounds/マウス・シングルクリック02.mp3";
+const CLICK_SOUND_PATH = "./sounds/senbei.mp3";
+const PRODUCT_CLICK_SOUND_PATH = "./sounds/mouse.mp3";
 
 // 名前から製品を取得する
 function getProductByName(name) {
@@ -128,14 +101,38 @@ function autoTick() {
   }
 }
 
-// ここまで：生徒が読んで改造する部分
-// ここから下：画面表示・保存接続・初期設定など、先生が用意する部分
+// ここまで：みんなが作る部分
+// ここから下：ゲームを起動、表示するための処理。触らない。
+
+let _particlesContainer;
+let _senbeiButton;
+let _productsElement;
+let _senbeiDisplayElement;
+let _senbeiCountElement;
+let _senbeiRateElement;
+let _clickSound;
+let _clickProductSound;
+let _onSave;
+let _lastAutoSave;
+
+const SENBEI_DISPLAY_SELECTOR = "#senbeiDisplay";
+const SENBEI_COUNT_SELECTOR = "#senbeiCount";
+const SENBEI_RATE_SELECTOR = "#senbeiRate";
+const PARTICLES_CONTAINER_SELECTOR = "#particles-container";
+const SENBEI_BUTTON_SELECTOR = ".senbei";
+const PRODUCTS_SELECTOR = "#products";
+
+const productImages = {
+  "カーソル": "DONOTTOUCH/image/cursor.png",
+  "お手伝い": "DONOTTOUCH/image/ojisan.png",
+  "農場": "DONOTTOUCH/image/factory.png"
+};
 
 // 製品一覧を DOM に描画する
 function renderProducts() {
   if (!_productsElement) {
     return;
-  }
+}
 
   _productsElement.innerHTML = products.map((product, index) => {
     const effect = product.name === "カーソル"
@@ -190,6 +187,13 @@ function onProductClick(event) {
     renderSenbeiDisplay();
   }
 }
+
+
+const DEFAULT_PRODUCTS = [
+  { name: "カーソル", basePrice: 4, price: 4, owned: 1 },
+  { name: "お手伝い", basePrice: 100, price: 100, owned: 0 },
+  { name: "農場", basePrice: 300, price: 300, owned: 0 }
+];
 
 const Game = {
   DEFAULT_PRODUCTS,
