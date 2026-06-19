@@ -54,10 +54,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, transparent 20%, rgba(0, 0, 0, 0.2) 100%),
-    repeating-linear-gradient(90deg, transparent 0 24px, rgba(0, 0, 0, 0.05) 24px 25px),
-    linear-gradient(180deg, var(--color-wood-mid) 0%, var(--color-wood) 35%, var(--color-wood-dark) 70%, var(--color-wood-ink) 100%);
+  background-color: #8b4a2f;
   border-bottom: 4px solid var(--color-wood-ink);
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
 }
@@ -218,36 +215,34 @@ body {
   border-bottom: 4px solid var(--color-wood-ink);
 }
 
+/* ④　のれんの色を変えてみよう！ */
 .noren {
   display: flex;
-  gap: 0;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
   width: 100%;
   height: 72px;
+  background-color: #c9482b;
+  color: var(--color-cream);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+  clip-path: polygon(0 0, 100% 0, 100% 82%, 85% 100%, 68% 84%, 50% 100%, 32% 84%, 15% 100%, 0 82%);
 }
 
 .noren span {
   display: flex;
-  padding: 10px;
-  flex: 1;
   align-items: center;
+  justify-content: center;
   height: 100%;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 25%, rgba(0, 0, 0, 0.15) 100%),
-    linear-gradient(180deg, var(--color-vermilion-light) 0%, var(--color-vermilion) 55%, var(--color-vermilion-dark) 100%);
-  clip-path: polygon(0 0, 100% 0, 100% 82%, 85% 100%, 68% 84%, 50% 100%, 32% 84%, 15% 100%, 0 82%);
+  padding: 0 10px;
   color: var(--color-cream);
   font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
-}
-
-.noren-left {
-  justify-content: end;
-  border-left: 2px solid rgba(0, 0, 0, 0.12);
-}
-
-.noren-right {
-  justify-content: start;
-  border-right: 2px solid rgba(0, 0, 0, 0.12);
 }
 
 .store {
