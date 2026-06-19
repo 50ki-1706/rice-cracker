@@ -123,6 +123,11 @@ body {
     4px 4px 0 var(--color-wood-ink);
 }
 
+#senbeiCount,
+#senbeiRate {
+  font-weight: 700;
+}
+
 #senbeiDisplay::before,
 #senbeiDisplay::after {
   content: '';
@@ -157,8 +162,8 @@ body {
 
 .senbei {
   display: block;
-  width: 240px;
-  height: 240px;
+  width: 384px;
+  height: 384px;
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.1s ease;
@@ -266,7 +271,7 @@ body {
 }
 
 .product-card h2 {
-  font-size: 1.1rem;
+  font-size: 2rem;
   color: var(--color-cream);
   text-shadow: 1px 1px 0 var(--color-wood-ink);
 }
@@ -282,12 +287,11 @@ body {
 }
 
 .product-image {
-  width: 72px;
-  height: 72px;
+  width: 192px;
+  height: 192px;
   flex-shrink: 0;
-  border-radius: 2px;
-  border: 2px solid var(--color-wood-dark);
-  background: var(--color-paper);
+  background: transparent;
+  object-fit: contain;
 }
 
 .product-info {

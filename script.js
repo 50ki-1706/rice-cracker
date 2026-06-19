@@ -10,7 +10,7 @@ const DEFAULT_PRODUCTS = [
 const productImages = {
   "カーソル": "DONOTTOUCH/image/cursor.png",
   "お手伝い": "DONOTTOUCH/image/ojisan.png",
-  "農場": "DONOTTOUCH/image/factry.png"
+  "農場": "DONOTTOUCH/image/factory.png"
 };
 
 let senbei;
@@ -19,6 +19,8 @@ let _particlesContainer;
 let _senbeiButton;
 let _productsElement;
 let _senbeiDisplayElement;
+let _senbeiCountElement;
+let _senbeiRateElement;
 let _clickSound;
 let _clickProductSound;
 let _onSave;
@@ -26,6 +28,8 @@ let _lastAutoSave;
 
 // 画面や音の設定
 const SENBEI_DISPLAY_SELECTOR = "#senbeiDisplay";
+const SENBEI_COUNT_SELECTOR = "#senbeiCount";
+const SENBEI_RATE_SELECTOR = "#senbeiRate";
 const PARTICLES_CONTAINER_SELECTOR = "#particles-container";
 const SENBEI_BUTTON_SELECTOR = ".senbei";
 const PRODUCTS_SELECTOR = "#products";
@@ -155,9 +159,11 @@ function renderProducts() {
 
 // せんべい表示を更新する
 function renderSenbeiDisplay() {
-  const display = _senbeiDisplayElement;
-  if (display) {
-    display.textContent = `せんべい: ${Math.floor(senbei)}枚 (+${getTotalAutoRate().toFixed(1)}枚/秒)`;
+  if (_senbeiCountElement) {
+    _senbeiCountElement.textContent = Math.floor(senbei);
+  }
+  if (_senbeiRateElement) {
+    _senbeiRateElement.textContent = getTotalAutoRate().toFixed(1);
   }
 }
 
@@ -196,6 +202,8 @@ const Game = {
     _senbeiButton = config.senbeiButton;
     _productsElement = config.productsElement;
     _senbeiDisplayElement = config.senbeiDisplayElement;
+    _senbeiCountElement = config.senbeiCountElement;
+    _senbeiRateElement = config.senbeiRateElement;
     _clickSound = config.clickSound;
     _clickProductSound = config.clickProductSound;
     _onSave = config.onSave;
@@ -220,6 +228,8 @@ window.Game = Game;
 // ブートストラップ。DOM・音声・ストレージを Game.init に接続する。
 (function () {
   const senbeiDisplayElement = document.querySelector(SENBEI_DISPLAY_SELECTOR);
+  const senbeiCountElement = document.querySelector(SENBEI_COUNT_SELECTOR);
+  const senbeiRateElement = document.querySelector(SENBEI_RATE_SELECTOR);
   const particlesContainer = document.querySelector(PARTICLES_CONTAINER_SELECTOR);
   const senbeiButton = document.querySelector(SENBEI_BUTTON_SELECTOR);
   const productsElement = document.querySelector(PRODUCTS_SELECTOR);
@@ -236,6 +246,8 @@ window.Game = Game;
     senbeiButton: senbeiButton,
     productsElement: productsElement,
     senbeiDisplayElement: senbeiDisplayElement,
+    senbeiCountElement: senbeiCountElement,
+    senbeiRateElement: senbeiRateElement,
     clickSound: clickSound,
     clickProductSound: clickProductSound,
     onSave: function (senbei, products) {
