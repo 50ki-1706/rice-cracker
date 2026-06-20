@@ -21,6 +21,8 @@ const PRODUCT_CLICK_SOUND_PATH = "./sounds/mouse.mp3";
 // ⑦　繰り返し処理を作ってみよう！
 // 指定した処理を3回繰り返す処理を作ってみよう。
 // 変数名は i を使用するよ。
+
+// 名前から適切なproductを選ぶ関数。
 function getProductByName(productList, name) {
   // 見つかった商品を入れる変数。最初は「見つからない」を表すnull
   let foundProduct = null;
@@ -34,29 +36,30 @@ function getProductByName(productList, name) {
   return foundProduct;
 }
 
-// 1回のクリックで増えるせんべいの枚数を返してみよう！
-// カーソルの数だけ、せんべいが増えるように、resultの結果を変えてみよう。
+// ⑧　せんべいをクリックしたらせんべいの数が増えるようにしよう！
+// getSenbeiPerClick関数の中にresult変数を宣言して、カーソルの数を代入しよう。
 // カーソルの数はcursor.ownedで取得できるよ。
 function getSenbeiPerClick(productList) {
   // カーソルという商品を探す
   const cursor = getProductByName(productList, "カーソル");
   // 返す枚数。カーソルがないときは1枚
-  let result = 1;
-  if (cursor !== null) {
-    result = cursor.owned;
-  }
+  let result;
+  result = cursor.owned;
   return result;
 }
 
-// 現在のせんべいの数に、クリックした分のせんべいを追加する処理を書こう！
+// ⑨  現在のせんべいの数に、クリックした分のせんべいを追加する処理を書こう！
+// senbeiが現在のせんべいの数、perClickがクリックしたら増える量だよ。
+// ますは変数resultを宣言して、resultにsenbeiとperClickを足した数を代入しよう。
 function onSenbeiClick(senbei, productList) {
   const perClick = getSenbeiPerClick(productList);
   const result = senbei + perClick;
   return result;
 }
 
+// ⑩  場合によって、変数の値を増やしてみよう。
+// 
 // 1つの商品が自動で増やすせんべいの数を返す処理。
-// 変数resultの値を更新しよう！
 function calcAutoRate(product) {
   // 自動生産しないときは0を返す
   let result = 0;
@@ -66,17 +69,21 @@ function calcAutoRate(product) {
   if (product.name !== "お手伝い" && product.name !== "せんべい工場") {
     return result;
   }
-  // 所有数に1.1の所有数乗をかける
+  // 問題: resultに商品の数かける1.1 の商品の数乗した数を代入
   result = product.owned * Math.pow(1.1, product.owned);
-  // せんべい工場の場合は8倍する
+  // 問題: せんべい工場の場合はさらに8倍する
+  // 商品の名前を確認するには、product.nameを使うよ。
   if (product.name === "せんべい工場") {
     result = result * 8;
   }
   return result;
 }
 
+// ⑪  楽に繰り返し処理を書いてみよう
+// productList.lengthを使用して処理を繰り返してみよう。
+// productList.lengthは商品の数を返してくれるよ。
+
 // 全部の商品の自動生産を合計して返す
-// 3回特定の処理をするプログラムを記述しよう！
 function getTotalAutoRate(productList) {
   let total = 0;
   // 商品の数だけ繰り返す
