@@ -160,7 +160,7 @@ function handleResetClick() {
 
 const resetButtonElement = document.querySelector("#resetButton");
 
-// リセットボタンがクリックされたら、handleResetClick関数を呼ぶ処理を作ろう！
+// ⑭ - 2 リセットボタンがクリックされたら、handleResetClick関数を呼ぶ処理を作ろう！
 // resetButtonElement.addEventListener("click", handleResetClick);と書いてみよう！
 if (resetButtonElement) {
 // ここにクリックイベントの処理を書いてみよう！
