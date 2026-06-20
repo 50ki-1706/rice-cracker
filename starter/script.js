@@ -1,32 +1,26 @@
 // ここから：生徒が触る部分
 
 // ⑤　変数を宣言してみよう！
-// せんべいの枚数を保存する変数senbeiと商品の状態を管理する変数productListを宣言しよう！
-// 変数senbeiには1や20,0.5のような整数と小数が入るよ。
-// 変数productListには{name:"商品の名前",owned:持っている商品の数,price:現在の商品の値段}、この要素が商品の数分配列で保存されるよ。
+// まずは、せんべいの枚数と、商品をしようするための変数を宣言してみよう。
+// 変数名は、senbei と productList にしよう。
 // この下に書いてみよう！
 
 
-// ⑥　定数に値を代入してみよう！
-// 定数は一度代入したら、再代入ができない定数だよ。
-// 今回は、文字で、音声ファイルが置かれている場所を代入するよ。
-// この下に書いてみよう！
+// ⑥　クリックしたら音がなるようにしよう！
 
-// せんべいをクリックした時の音。
-const CLICK_SOUND_PATH = "";
-// 商品をクリックした時の音。
-const PRODUCT_CLICK_SOUND_PATH = "";
+// senbei.mp3のパスを入れてみよう。
+const CLICK_SOUND_PATH = "ここに入れるよ";
+// productClick.mp3のパスを入れてみよう。
+const PRODUCT_CLICK_SOUND_PATH = "ここに入れるよ";
+
+// できたら、index.htmlを開いて、せんべいと商品をクリックして音がなるか確認してみよう。
 
 // ⑦　繰り返し処理を作ってみよう！
-// 指定した処理を3回繰り返す処理を作ってみよう。
-// 変数名は i を使用するよ。
 
 // 名前から適切なproductを選ぶ関数。
 function getProductByName(productList, name) {
-  // 見つかった商品を入れる変数。最初は「見つからない」を表すnull
   let foundProduct = null;
-  // リストを1つずつ調べる
-  // この下の処理を繰り返し処理しよう！
+    // 下のコメントアウトを外して、3回繰り返す処理を書いてみよう！
 
     // if (productList[i].name === name) {
     //   foundProduct = productList[i];
@@ -37,30 +31,30 @@ function getProductByName(productList, name) {
 }
 
 // ⑧　せんべいをクリックしたらせんべいの数が増えるようにしよう！
-// getSenbeiPerClick関数の中にresult変数を宣言して、カーソルの数を代入しよう。
-// カーソルの数はcursor.ownedで取得できるよ。
 function getSenbeiPerClick(productList) {
   // カーソルという商品を探す
   const cursor = getProductByName(productList, "カーソル");
-  // この下に書いてみよう！
+  // まずは変数resultを宣言してみよう
+
+  // resultにカーソルの数を代入してみよう。カーソルの数はcursor.ownedを使うよ。
 
   // return result;
 }
 
 // ⑨  現在のせんべいの数に、クリックした分のせんべいを追加する処理を書こう！
-// senbeiが現在のせんべいの数、perClickがクリックしたら増える量だよ。
-// ますは変数resultを宣言して、resultにsenbeiとperClickを足した数を代入しよう。
 function onSenbeiClick(senbei, productList) {
   const perClick = getSenbeiPerClick(productList);
-  // この下に書いてみよう！
-
+  // まずは変数resultを宣言してみよう
+  
+  // resultに現在のせんべいの数にクリックした分のせんべいを足してみよう。
+  // ヒント: result = senbei + perClick;
+  
   return result;
 }
 
 // ⑩  場合によって、変数の値を増やしてみよう。 
-// 1つの商品が自動で増やすせんべいの数を返す処理。
+// 1つの商品が自動で増やすせんべいの数を返す関数。
 function calcAutoRate(product) {
-  // 自動生産しないときは0を返す
   let result = 0;
   if (!product || product.owned === 0) {
     return result;
@@ -68,25 +62,24 @@ function calcAutoRate(product) {
   if (product.name !== "お手伝い" && product.name !== "せんべい工場") {
     return result;
   }
-  // 問題: resultに商品の数かける1.1 の商品の数乗した数を代入
-  // ヒント: product.owned * Math.pow(1.1, product.owned)を代入するよ
+  // resultにproduct.owned * Math.pow(1.1, product.owned)を代入してみよう。
 
-  // 問題: せんべい工場の場合はさらに8倍する
+  // 商品の名前がせんべい工場の場合はresultを8倍しよう
   // ヒント: 商品の名前を確認するには、if文とproduct.nameを使うよ。
 
   return result;
 }
 
 // ⑪  楽に繰り返し処理を書いてみよう
-// productList.lengthを使用して処理を繰り返してみよう。
-// productList.lengthは商品の数を返してくれるよ。
 
 // 全部の商品の自動生産を合計して返す
 function getTotalAutoRate(productList) {
   let total = 0;
   // 商品の数だけ繰り返す
 
-  // この処理を繰り返し処理してみよう
+  // 下のコメントアウトを外して、その処理を3回繰り返す処理を書いてみよう。
+  // 今回は3のところにproductList.lengthと書いてみよう。
+  // 変数名はiにするよ。
   
     // total += calcAutoRate(productList[i]);
   
@@ -98,11 +91,10 @@ function getTotalAutoRate(productList) {
 // 商品を1つ買うときの次の値段を計算して返す
 function calcNextPrice(product) {
   // 基本価格に1.15の(所有数+1)乗をかける
-  const multiplied = product.basePrice * Math.pow(1.15, product.owned + 1);
+  const newPrice = product.basePrice * Math.pow(1.15, product.owned + 1);
   let result;
-  // 問題: multipliedの小数点を切り捨てて整数にしてresultに代入しよう。
-  // ヒントMath.floorを使用するよ
-  // この下に書いてみよう！
+  // 問題: newPriceの小数点を切り捨てて整数にしてresultに代入しよう。
+  // ヒント: result = Math.floor(newPrice);
 
   return result;
 }
@@ -111,12 +103,14 @@ function calcNextPrice(product) {
 function buyProduct(senbei, product) {
   let availableSenbei;
   // 問題: 変数availableSenbeiに引数senbeiの小数を切り捨てして代入しよう。
+  // ヒント: availableSenbei = Math.floor(senbei);
   
   // 商品の値段
   const price = product.price;
   // 買えなかったときの結果
   let result = { senbei: senbei, product, purchased: false };
   // 問題: せんべいの数が買う商品の値段より少ない場合の条件を書いてみよう！
+  // 条件分岐と比較演算子を覚えているかな？
   // 下のコメントアウトを外して、中の条件を書こう！
 
   // if (ここに条件を書く) {
@@ -138,7 +132,6 @@ function buyProduct(senbei, product) {
   return result;
 }
 
-// ゲームをリセットしたときの初期状態を作る
 function createResetState(defaultProducts) {
   // 商品データを初期状態に戻す（deep copy）
   const resetProducts = cloneDefaults(defaultProducts);
@@ -150,7 +143,6 @@ function createResetState(defaultProducts) {
   return result;
 }
 
-// リセットボタンが押されたときに最初に動く処理
 function handleResetClick() {
   // 本当にリセットしてもいいか確認する
   const confirmed = window.confirm("本当にリセットしますか？");
@@ -164,12 +156,12 @@ function handleResetClick() {
 }
 
 // ⑭  リセット機能を作ろう！
-// まずはindex.htmlに戻ってリセットボタンを作ろう!
+// まずはindex.htmlに戻ってリセットボタンを作ってみよう!
 
-// リセットボタンの要素を探す。HTMLでボタンがコメントアウトされているときは null になる。
 const resetButtonElement = document.querySelector("#resetButton");
 
 // リセットボタンがクリックされたら、handleResetClick関数を呼ぶ処理を作ろう！
+// resetButtonElement.addEventListener("click", handleResetClick);と書いてみよう！
 if (resetButtonElement) {
 // ここにクリックイベントの処理を書いてみよう！
 }
