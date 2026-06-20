@@ -21,6 +21,7 @@ const PRODUCT_CLICK_SOUND_PATH = "ここに入れるよ";
 function getProductByName(productList, name) {
   let foundProduct = null;
     // 下のコメントアウトを外して、3回繰り返す処理を書いてみよう！
+    // 変数名はiにするよ。
 
     // if (productList[i].name === name) {
     //   foundProduct = productList[i];
@@ -32,7 +33,6 @@ function getProductByName(productList, name) {
 
 // ⑧　せんべいをクリックしたらせんべいの数が増えるようにしよう！
 function getSenbeiPerClick(productList) {
-  // カーソルという商品を探す
   const cursor = getProductByName(productList, "カーソル");
   // まずは変数resultを宣言してみよう
 
@@ -40,6 +40,8 @@ function getSenbeiPerClick(productList) {
 
   // return result;
 }
+
+// ここまでできたら、index.htmlを開いて、せんべいをクリックしてせんべいの数が増えるか確認してみよう。
 
 // ⑨  現在のせんべいの数に、クリックした分のせんべいを追加する処理を書こう！
 function onSenbeiClick(senbei, productList) {
@@ -64,8 +66,9 @@ function calcAutoRate(product) {
   }
   // resultにproduct.owned * Math.pow(1.1, product.owned)を代入してみよう。
 
-  // 商品の名前がせんべい工場の場合はresultを8倍しよう
-  // ヒント: 商品の名前を確認するには、if文とproduct.nameを使うよ。
+  // もし商品の名前がせんべい工場なら、resultを８倍しよう。
+  // 条件分岐と比較演算子を覚えているかな？
+
 
   return result;
 }
@@ -76,7 +79,6 @@ function calcAutoRate(product) {
 function getTotalAutoRate(productList) {
   let total = 0;
   // 商品の数だけ繰り返す
-
   // 下のコメントアウトを外して、その処理を3回繰り返す処理を書いてみよう。
   // 今回は3のところにproductList.lengthと書いてみよう。
   // 変数名はiにするよ。
@@ -109,8 +111,9 @@ function buyProduct(senbei, product) {
   const price = product.price;
   // 買えなかったときの結果
   let result = { senbei: senbei, product, purchased: false };
-  // 問題: せんべいの数が買う商品の値段より少ない場合の条件を書いてみよう！
-  // 条件分岐と比較演算子を覚えているかな？
+  // 問題: もし、せんべいの数が商品の値段より少なかったらという条件分岐を作ろう。
+  // せんべいの数はavailableSenbei、商品の値段はpriceだよ。
+  // 使用する比較演算子はわかるかな？
   // 下のコメントアウトを外して、中の条件を書こう！
 
   // if (ここに条件を書く) {
@@ -132,10 +135,10 @@ function buyProduct(senbei, product) {
   return result;
 }
 
+// ここまでできたら、index.htmlを開いて、商品を購入して、せんべいの自動生産ができているか確認してみよう。
+
 function createResetState(defaultProducts) {
-  // 商品データを初期状態に戻す（deep copy）
   const resetProducts = cloneDefaults(defaultProducts);
-  // せんべいと商品を初期状態にした結果
   const result = {
     senbei: 0,
     products: resetProducts
@@ -144,14 +147,10 @@ function createResetState(defaultProducts) {
 }
 
 function handleResetClick() {
-  // 本当にリセットしてもいいか確認する
   const confirmed = window.confirm("本当にリセットしますか？");
   if (!confirmed) {
-    // キャンセルされたら何もしないで終わる
     return;
   }
-
-  // 難しいリセットの処理は隠された resetGame() に任せる
   resetGame();
 }
 
