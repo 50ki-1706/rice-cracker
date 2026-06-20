@@ -166,14 +166,15 @@ function handleResetClick() {
 // ⑭  リセット機能を作ろう！
 // まずはindex.htmlに戻ってリセットボタンを作ろう!
 
-// index.htmlのid="resetButton"探す変数resetButtonElementを作成しよう！
+// リセットボタンの要素を探す。HTMLでボタンがコメントアウトされているときは null になる。
+const resetButtonElement = document.querySelector("#resetButton");
 
-// クリックした時に、handleResetClick関数を呼ぶ処理を作ろう！
+// リセットボタンがクリックされたら、handleResetClick関数を呼ぶ処理を作ろう！
 if (resetButtonElement) {
 // ここにクリックイベントの処理を書いてみよう！
 }
 
-// ここから下は触らない
+// ----- ここから下は触らない -----
 
 // 自動生産のタイマーや保存、画面表示をつなげる処理
 
