@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ①titleタグの中身を書き換えて好きな言葉を入れて、ゲームのタイトルを設定しよう! -->
+  <title>Rice Cracker</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="DONOTTOUCH/lib.js" defer></script>
+  <script src="DONOTTOUCH/storage.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <header class="shop-sign">
+    <!-- ②h1タグにも好きな言葉を入れて、お店の名前を設定しよう! -->
+    <h1>和菓子処</h1>
+  </header>
+  <div class="container">
+    <div id="particles-container"></div>
+    <div class="sectionLeft">
+      <!-- 【課題】ここにリセットボタンを追加しよう！
+        下の例のように button タグを書いてみよう。
+        id="resetButton"、class="reset-button"、type="button" を忘れないでね。
+        ボタンの文字は「リセット」にしてみよう。 -->
+      <!-- <button id="resetButton" class="reset-button" type="button">リセット</button> -->
+      <div id="senbeiDisplay">せんべい: <span id="senbeiCount">0</span>枚 (+<span id="senbeiRate">0.0</span>枚/秒)</div>
+      <div class="senbei-wrapper">
+        <!-- ③せんべいの画像を追加して、ゲームに反映させよう！ -->
+        <img src="senbei.png" class="senbei" alt="せんべい">
+      </div>
+    </div>
+    <div class="sectionRight">
+      <div class="shop-header">
+        <div class="noren">商品</div>
+      </div>
+      <div class="store">
+        <div id="products">
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

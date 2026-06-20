@@ -1,0 +1,380 @@
+@font-face {
+  font-family: 'PixelMplus12-Regular';
+  src: url('DONOTTOUCH/fonts/PixelMplus12-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-paper: #E8DCC4;
+  --color-paper-dark: #D6C6A8;
+  --color-ink: #1A0E08;
+  --color-wood-ink: #2A1810;
+  --color-wood-dark: #3E2618;
+  --color-wood: #5C3A23;
+  --color-wood-mid: #754B2F;
+  --color-wood-light: #A07850;
+  --color-wood-pale: #C4A77D;
+  --color-vermilion: #9E2B25;
+  --color-vermilion-dark: #721E19;
+  --color-vermilion-light: #C03A32;
+  --color-gold: #C9A13D;
+  --color-cream: #F8F3E8;
+  --font-jp: 'PixelMplus12-Regular', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  font-family: var(--font-jp);
+  color: var(--color-ink);
+  background: var(--color-paper-dark);
+}
+
+.shop-sign {
+  flex-shrink: 0;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #8b4a2f;
+  border-bottom: 4px solid var(--color-wood-ink);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.shop-sign h1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.9rem;
+  color: var(--color-cream);
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-shadow: 2px 2px 0 var(--color-wood-ink);
+}
+
+.shop-sign h1::before,
+.shop-sign h1::after {
+  content: '◆';
+  color: var(--color-gold);
+  pointer-events: none;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  min-height: 0;
+}
+
+.sectionLeft {
+  flex: 0 0 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  position: relative;
+  background:
+    linear-gradient(135deg, rgba(26, 14, 8, 0.6) 0%, rgba(26, 14, 8, 0.25) 50%, rgba(26, 14, 8, 0.6) 100%),
+    url('DONOTTOUCH/image/background.png') center / cover no-repeat;
+  border-right: 4px solid var(--color-wood-dark);
+}
+
+.reset-button {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 8px 16px;
+  font-family: var(--font-jp);
+  font-size: 0.95rem;
+  color: var(--color-cream);
+  background: var(--color-vermilion);
+  border: 2px solid var(--color-vermilion-dark);
+  border-radius: 2px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--color-wood-ink);
+}
+
+.reset-button:hover {
+  background: var(--color-vermilion-light);
+}
+
+#senbeiDisplay {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 280px;
+  padding: 14px 28px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.04) 0 2px, transparent 2px 6px),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.04) 0 2px, transparent 2px 8px),
+    linear-gradient(180deg, var(--color-wood-pale) 0%, var(--color-wood-light) 45%, var(--color-wood-mid) 100%);
+  border: 3px solid var(--color-wood-dark);
+  border-radius: 2px;
+  font-size: 1.15rem;
+  color: var(--color-cream);
+  text-shadow: 1px 1px 0 var(--color-wood-ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+    4px 4px 0 var(--color-wood-ink);
+}
+
+#senbeiCount,
+#senbeiRate {
+  font-weight: 700;
+}
+
+#senbeiDisplay::before,
+#senbeiDisplay::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: var(--color-wood-dark);
+  border: 1px solid var(--color-wood-pale);
+  pointer-events: none;
+}
+
+#senbeiDisplay::before {
+  top: -6px;
+}
+
+#senbeiDisplay::after {
+  bottom: -6px;
+}
+
+.senbei-wrapper {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.senbei {
+  display: block;
+  width: 384px;
+  height: 384px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  object-fit: contain;
+}
+
+.senbei:hover {
+  transform: scale(1.05);
+}
+
+.senbei.clicked {
+  animation: pop 0.3s ease;
+}
+
+.sectionRight {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 10px, rgba(0, 0, 0, 0.04) 10px 11px),
+    linear-gradient(180deg, var(--color-wood) 0%, var(--color-wood-dark) 100%);
+}
+
+.shop-header {
+  flex-shrink: 0;
+  height: 76px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 30%, rgba(0, 0, 0, 0.2) 100%),
+    var(--color-wood-dark);
+  border-bottom: 4px solid var(--color-wood-ink);
+}
+
+/* ④　のれんの色を変えてみよう！ */
+.noren {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  height: 72px;
+  background-color: #c9482b;
+  color: var(--color-cream);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+  clip-path: polygon(0 0, 100% 0, 100% 82%, 85% 100%, 68% 84%, 50% 100%, 32% 84%, 15% 100%, 0 82%);
+}
+
+.noren span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 10px;
+  color: var(--color-cream);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.store {
+  flex: 1;
+  overflow-y: auto;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 32px, rgba(0, 0, 0, 0.04) 32px 33px),
+    repeating-linear-gradient(0deg, transparent 0 44px, rgba(0, 0, 0, 0.05) 44px 45px),
+    linear-gradient(180deg, var(--color-wood-mid) 0%, var(--color-wood) 100%);
+  padding: 20px;
+}
+
+.product-card {
+  margin-bottom: 14px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.04) 0 2px, transparent 2px 6px),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.04) 0 2px, transparent 2px 8px),
+    linear-gradient(180deg, var(--color-wood-pale) 0%, var(--color-wood-light) 45%, var(--color-wood-mid) 100%);
+  border: 3px solid var(--color-wood-dark);
+  border-radius: 2px;
+  cursor: pointer;
+  color: var(--color-cream);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.18),
+    3px 3px 0 var(--color-wood-ink);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.product-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.18),
+    5px 5px 0 var(--color-wood-ink);
+}
+
+.product-card h2 {
+  font-size: 2rem;
+  color: var(--color-cream);
+  text-shadow: 1px 1px 0 var(--color-wood-ink);
+}
+
+.product-card p {
+  margin-top: 4px;
+  color: var(--color-paper);
+}
+
+.product-card .effect {
+  font-size: 0.85rem;
+  color: var(--color-gold);
+}
+
+.product-image {
+  width: 192px;
+  height: 192px;
+  flex-shrink: 0;
+  background: transparent;
+  object-fit: contain;
+}
+
+.product-info {
+  flex: 1;
+  min-width: 0;
+}
+
+#particles-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.particle {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-wood-pale);
+  pointer-events: none;
+  box-shadow: 0 0 4px rgba(201, 161, 61, 0.5);
+  animation: particle-fly 0.8s ease-out forwards;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(0.85);
+  }
+
+  60% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes particle-fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx, 0), -80px) scale(0.3);
+  }
+}
+
+.store::-webkit-scrollbar {
+  width: 10px;
+}
+
+.store::-webkit-scrollbar-track {
+  background: var(--color-wood-dark);
+}
+
+.store::-webkit-scrollbar-thumb {
+  background: var(--color-wood-light);
+  border: 1px solid var(--color-wood-ink);
+}
+
+.store::-webkit-scrollbar-thumb:hover {
+  background: var(--color-wood-pale);
+}
