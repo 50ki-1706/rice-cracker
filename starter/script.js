@@ -5,8 +5,7 @@
 // 変数senbeiには1や20,0.5のような整数と小数が入るよ。
 // 変数productListには{name:"商品の名前",owned:持っている商品の数,price:現在の商品の値段}、この要素が商品の数分配列で保存されるよ。
 // この下に書いてみよう！
-let senbei;
-let productList;
+
 
 // ⑥　定数に値を代入してみよう！
 // 定数は一度代入したら、再代入ができない定数だよ。
@@ -14,9 +13,9 @@ let productList;
 // この下に書いてみよう！
 
 // せんべいをクリックした時の音。
-const CLICK_SOUND_PATH = "./sounds/senbei.mp3";
+const CLICK_SOUND_PATH = "";
 // 商品をクリックした時の音。
-const PRODUCT_CLICK_SOUND_PATH = "./sounds/mouse.mp3";
+const PRODUCT_CLICK_SOUND_PATH = "";
 
 // ⑦　繰り返し処理を作ってみよう！
 // 指定した処理を3回繰り返す処理を作ってみよう。
@@ -27,12 +26,13 @@ function getProductByName(productList, name) {
   // 見つかった商品を入れる変数。最初は「見つからない」を表すnull
   let foundProduct = null;
   // リストを1つずつ調べる
-  for (let i = 0; i < 3; i++) {
-    if (productList[i].name === name) {
-      foundProduct = productList[i];
-      break;
-    }
-  }
+  // この下の処理を繰り返し処理しよう！
+
+    // if (productList[i].name === name) {
+    //   foundProduct = productList[i];
+    //   break;
+    // }
+
   return foundProduct;
 }
 
@@ -42,10 +42,9 @@ function getProductByName(productList, name) {
 function getSenbeiPerClick(productList) {
   // カーソルという商品を探す
   const cursor = getProductByName(productList, "カーソル");
-  // 返す枚数。カーソルがないときは1枚
-  let result;
-  result = cursor.owned;
-  return result;
+  // この下に書いてみよう！
+
+  // return result;
 }
 
 // ⑨  現在のせんべいの数に、クリックした分のせんべいを追加する処理を書こう！
@@ -53,12 +52,12 @@ function getSenbeiPerClick(productList) {
 // ますは変数resultを宣言して、resultにsenbeiとperClickを足した数を代入しよう。
 function onSenbeiClick(senbei, productList) {
   const perClick = getSenbeiPerClick(productList);
-  const result = senbei + perClick;
+  // この下に書いてみよう！
+
   return result;
 }
 
-// ⑩  場合によって、変数の値を増やしてみよう。
-// 
+// ⑩  場合によって、変数の値を増やしてみよう。 
 // 1つの商品が自動で増やすせんべいの数を返す処理。
 function calcAutoRate(product) {
   // 自動生産しないときは0を返す
@@ -70,12 +69,11 @@ function calcAutoRate(product) {
     return result;
   }
   // 問題: resultに商品の数かける1.1 の商品の数乗した数を代入
-  result = product.owned * Math.pow(1.1, product.owned);
+  // ヒント: product.owned * Math.pow(1.1, product.owned)を代入するよ
+
   // 問題: せんべい工場の場合はさらに8倍する
-  // 商品の名前を確認するには、product.nameを使うよ。
-  if (product.name === "せんべい工場") {
-    result = result * 8;
-  }
+  // ヒント: 商品の名前を確認するには、if文とproduct.nameを使うよ。
+
   return result;
 }
 
@@ -87,9 +85,11 @@ function calcAutoRate(product) {
 function getTotalAutoRate(productList) {
   let total = 0;
   // 商品の数だけ繰り返す
-  for (let i = 0; i < productList.length; i++) {
-    total += calcAutoRate(productList[i]);
-  }
+
+  // この処理を繰り返し処理してみよう
+  
+    // total += calcAutoRate(productList[i]);
+  
   return total;
 }
 
@@ -97,27 +97,31 @@ function getTotalAutoRate(productList) {
 
 // 商品を1つ買うときの次の値段を計算して返す
 function calcNextPrice(product) {
-  // 問題: 基本価格に1.15の(所有数+1)乗をかける
-  // ヒント累乗はMath.pow()を使用するよ。
+  // 基本価格に1.15の(所有数+1)乗をかける
   const multiplied = product.basePrice * Math.pow(1.15, product.owned + 1);
-  // 問題: 小数点を切り捨てて整数にしよう！
+  let result;
+  // 問題: multipliedの小数点を切り捨てて整数にしてresultに代入しよう。
   // ヒントMath.floorを使用するよ
-  const result = Math.floor(multiplied);
+  // この下に書いてみよう！
+
   return result;
 }
 
 // ⑬  せんべいを使って商品を買う処理を書こう！
 function buyProduct(senbei, product) {
-  // 問題: senbeiの小数を切り捨てして代入しよう。
-  const availableSenbei = Math.floor(senbei);
+  let availableSenbei;
+  // 問題: 変数availableSenbeiに引数senbeiの小数を切り捨てして代入しよう。
+  
   // 商品の値段
   const price = product.price;
   // 買えなかったときの結果
   let result = { senbei: senbei, product, purchased: false };
   // 問題: せんべいの数が買う商品の値段より少ない場合の条件を書いてみよう！
-  if (availableSenbei < price) {
-    return result;
-  }
+  // 下のコメントアウトを外して、中の条件を書こう！
+
+  // if (ここに条件を書く) {
+  //   return result;
+  // }
 
   // 買ったあとの商品データ
   const nextProduct = {
@@ -163,11 +167,10 @@ function handleResetClick() {
 // まずはindex.htmlに戻ってリセットボタンを作ろう!
 
 // index.htmlのid="resetButton"探す変数resetButtonElementを作成しよう！
-const resetButtonElement = document.querySelector("#resetButton");
 
 // クリックした時に、handleResetClick関数を呼ぶ処理を作ろう！
 if (resetButtonElement) {
-  resetButtonElement.addEventListener("click", handleResetClick);
+// ここにクリックイベントの処理を書いてみよう！
 }
 
 // ここから下は触らない
