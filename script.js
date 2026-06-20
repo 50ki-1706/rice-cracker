@@ -93,25 +93,28 @@ function getTotalAutoRate(productList) {
   return total;
 }
 
+// ⑫  商品の値段を更新する処理を書いてみよう。
+
 // 商品を1つ買うときの次の値段を計算して返す
-// 変数resultを完成させよう！
 function calcNextPrice(product) {
-  // 基本価格に1.15の(所有数+1)乗をかける
+  // 問題: 基本価格に1.15の(所有数+1)乗をかける
+  // ヒント累乗はMath.pow()を使用するよ。
   const multiplied = product.basePrice * Math.pow(1.15, product.owned + 1);
-  // Math.floorは小数点以下を切り捨てて整数にする関数だよ
+  // 問題: 小数点を切り捨てて整数にしよう！
+  // ヒントMath.floorを使用するよ
   const result = Math.floor(multiplied);
   return result;
 }
 
-// せんべいを使って商品を買う
+// ⑬  せんべいを使って商品を買う処理を書こう！
 function buyProduct(senbei, product) {
-  // 所持しているせんべいの枚数（小数点以下は切り捨て）
+  // 問題: senbeiの小数を切り捨てして代入しよう。
   const availableSenbei = Math.floor(senbei);
   // 商品の値段
   const price = product.price;
   // 買えなかったときの結果
   let result = { senbei: senbei, product, purchased: false };
-  //　せんべいの数が買う商品の値段より少ない場合の処理を書こう！
+  // 問題: せんべいの数が買う商品の値段より少ない場合の条件を書いてみよう！
   if (availableSenbei < price) {
     return result;
   }
@@ -156,10 +159,13 @@ function handleResetClick() {
   resetGame();
 }
 
-// HTML の id="resetButton" と同じ名前を使って、リセットボタンの要素を探す
+// ⑭  リセット機能を作ろう！
+// まずはindex.htmlに戻ってリセットボタンを作ろう!
+
+// index.htmlのid="resetButton"探す変数resetButtonElementを作成しよう！
 const resetButtonElement = document.querySelector("#resetButton");
 
-// リセットボタンが見つかったら、クリックしたときに handleResetClick を動かす
+// クリックした時に、handleResetClick関数を呼ぶ処理を作ろう！
 if (resetButtonElement) {
   resetButtonElement.addEventListener("click", handleResetClick);
 }
